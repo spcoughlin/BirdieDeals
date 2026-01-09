@@ -1,0 +1,9 @@
+.deals-grid {
+  margin-top: var(--space-lg);
+}
+
+.results-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}

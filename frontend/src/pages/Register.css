@@ -1,0 +1,212 @@
+.register-page {
+  padding-bottom: var(--space-3xl);
+}
+
+.register-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.step-section {
+  margin-top: var(--space-lg);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-lg);
+}
+
+.profile-section {
+  margin-bottom: var(--space-lg);
+}
+
+.section-summary {
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-md) 0;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.section-summary:hover {
+  color: var(--color-primary-light);
+}
+
+.club-count {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.radio-group {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+}
+
+.radio-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+.budget-options {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.budget-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.budget-option:hover {
+  border-color: var(--color-primary);
+}
+
+.budget-option.selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.budget-option input {
+  display: none;
+}
+
+.brand-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.brand-chip {
+  padding: var(--space-xs) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.brand-chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.brand-chip.selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.brand-chip.avoid.selected {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.clubs-section {
+  margin-top: var(--space-md);
+}
+
+.clubs-error {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.add-club-btn {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Preview Section */
+.preview-section {
+  margin-top: var(--space-lg);
+}
+
+.preview-card {
+  margin-bottom: var(--space-md);
+}
+
+.preview-card h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-md);
+  color: var(--color-primary);
+}
+
+.preview-card p {
+  margin-bottom: var(--space-xs);
+  font-size: var(--font-size-sm);
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (min-width: 640px) {
+  .preview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.clubs-preview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clubs-preview-list li {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.clubs-preview-list li:last-child {
+  border-bottom: none;
+}

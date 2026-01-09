@@ -1,0 +1,58 @@
+.deal-card-skeleton {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-image {
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+}
+
+.skeleton-content {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.skeleton-meta {
+  height: 12px;
+  width: 40%;
+}
+
+.skeleton-title {
+  height: 18px;
+  width: 100%;
+}
+
+.skeleton-title-2 {
+  height: 18px;
+  width: 70%;
+}
+
+.skeleton-price {
+  height: 24px;
+  width: 30%;
+}
+
+.skeleton-retailer {
+  height: 14px;
+  width: 50%;
+}
+
+.skeleton-tags {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.skeleton-tag {
+  height: 22px;
+  width: 60px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-button {
+  height: 40px;
+  width: 100%;
+  margin-top: var(--space-md);
+}

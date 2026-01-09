@@ -1,0 +1,98 @@
+.account-page {
+  padding-bottom: var(--space-3xl);
+}
+
+.account-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.account-section {
+  margin-bottom: var(--space-lg);
+}
+
+.account-section h2 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-md);
+  color: var(--color-primary);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+.account-details p {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-sm);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  color: var(--color-text-muted);
+}
+
+.profile-value {
+  font-weight: var(--font-weight-medium);
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.clubs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clubs-list li {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.clubs-list li:last-child {
+  border-bottom: none;
+}
+
+.empty-text {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.account-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.loading-state {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--color-text-muted);
+}
