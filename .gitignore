@@ -6,6 +6,8 @@
 .env.*
 *.log
 
+backend/klaviyo_openapi_spec.json
+
 ############################
 # Node / React (frontend)
 ############################
