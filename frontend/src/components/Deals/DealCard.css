@@ -50,6 +50,18 @@
   border-radius: var(--radius-sm);
 }
 
+.deal-match-badge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  background-color: var(--color-primary);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
 .deal-content {
   padding: var(--space-lg);
   display: flex;

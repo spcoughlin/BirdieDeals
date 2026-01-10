@@ -216,25 +216,62 @@ export default function Register() {
   };
 
   const handleSubmit = async () => {
+    console.log('[FORM] handleSubmit called');
     try {
       setLoading(true);
       
       const validClubs = clubs.filter(c => c.type && c.brand && c.model);
+      console.log('[FORM] Valid clubs:', validClubs.length, validClubs);
       
-      await register({
+      // Transform frontend club structure to backend format
+      const transformedClubs = validClubs.map(club => ({
+        name: club.type, // Backend uses 'name' instead of 'type'
+        brand: club.brand,
+        model: club.model,
+        loft: club.loft ? parseFloat(club.loft) : null,
+        carryYards: club.carryDistance ? parseInt(club.carryDistance, 10) : null, // Backend uses 'carryYards'
+        usage: 'primary',
+      }));
+      console.log('[FORM] Transformed clubs:', transformedClubs);
+      
+      // Transform profile to use backend field names
+      const backendProfile = {
+        handicap: profile.handicap ? parseFloat(profile.handicap) : null,
+        driverCarry: profile.driverCarry ? parseInt(profile.driverCarry, 10) : null,
+        sevenIronCarry: profile.sevenIronCarry ? parseInt(profile.sevenIronCarry, 10) : null,
+        roundsPerMonth: profile.roundsPerMonth ? parseInt(profile.roundsPerMonth, 10) : null,
+        monthsPlayedPerYear: profile.monthsPlayedPerYear ? parseInt(profile.monthsPlayedPerYear, 10) : null,
+        region: profile.region || null,
+        // Map frontend budgetPreference to backend budgetSensitivity
+        budgetSensitivity: profile.budgetPreference === 'value' ? 'Value-First' 
+          : profile.budgetPreference === 'premium' ? 'Performance-First' 
+          : 'Balanced',
+        willingToBuyUsed: profile.willingToBuyUsed === 'yes',
+        preferredBrands: profile.preferredBrands,
+        clubs: transformedClubs,
+        // Keep original fields for reference
+        ageRange: profile.ageRange,
+        dominantHand: profile.dominantHand,
+        yearsPlaying: profile.yearsPlaying,
+      };
+      console.log('[FORM] Backend profile:', backendProfile);
+      
+      const registrationData = {
         username: account.username,
         email: account.email,
         password: account.password,
-        profile: {
-          ...profile,
-          clubs: validClubs
-        }
-      });
+        profile: backendProfile,
+      };
+      console.log('[FORM] Calling register with:', registrationData);
+      
+      await register(registrationData);
+      console.log('[FORM] Register succeeded');
       
       clearDraft();
-      toast.success('Account created! Welcome to BagFit Deals.');
+      toast.success('Account created! Welcome to BirdieDeals.');
       navigate('/suggested');
     } catch (err) {
+      console.error('[FORM] Registration error:', err);
       toast.error(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);

@@ -18,6 +18,8 @@ export default function SuggestedDeals() {
   const [deals, setDeals] = useState([]);
   const [reasoning, setReasoning] = useState('');
   const [profileSummary, setProfileSummary] = useState(null);
+  const [gappingAnalysis, setGappingAnalysis] = useState(null);
+  const [riskScores, setRiskScores] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -39,6 +41,8 @@ export default function SuggestedDeals() {
         setDeals(response.deals || []);
         setReasoning(response.reasoning || '');
         setProfileSummary(response.profileSummary || null);
+        setGappingAnalysis(response.gappingAnalysis || null);
+        setRiskScores(response.riskScores || null);
       } catch (err) {
         if (err.message === 'Unauthorized') {
           logout();
@@ -105,7 +109,9 @@ export default function SuggestedDeals() {
             <>
               <ProfileSummaryCard 
                 profile={profileSummary} 
-                reasoning={reasoning} 
+                reasoning={reasoning}
+                gappingAnalysis={gappingAnalysis}
+                riskScores={riskScores}
               />
 
               {deals.length === 0 ? (

@@ -1,7 +1,9 @@
+import { apiClient } from '../../api/client';
 import './DealCard.css';
 
 export default function DealCard({ deal, showFitReason = false }) {
   const {
+    id,
     title,
     brand,
     category,
@@ -12,8 +14,13 @@ export default function DealCard({ deal, showFitReason = false }) {
     imageUrl,
     tags = [],
     fitReason,
+    matchReason,
+    matchScore,
     expiresAt
   } = deal;
+
+  // Use matchReason from backend or fitReason as fallback
+  const displayReason = fitReason || matchReason;
 
   const discountPercent = originalPrice 
     ? Math.round((1 - price / originalPrice) * 100) 
@@ -23,6 +30,13 @@ export default function DealCard({ deal, showFitReason = false }) {
 
   const isExpiringSoon = expiresAt && 
     new Date(expiresAt) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+
+  const handleDealClick = async (e) => {
+    // Track the click before navigating
+    if (id) {
+      apiClient.trackDealClick(id);
+    }
+  };
 
   return (
     <article className="deal-card card">
@@ -42,6 +56,11 @@ export default function DealCard({ deal, showFitReason = false }) {
         {discountPercent > 0 && (
           <span className="deal-discount-badge">
             {discountPercent}% OFF
+          </span>
+        )}
+        {matchScore && matchScore >= 0.8 && (
+          <span className="deal-match-badge">
+            Top Match
           </span>
         )}
       </div>
@@ -73,10 +92,10 @@ export default function DealCard({ deal, showFitReason = false }) {
           </div>
         )}
 
-        {showFitReason && fitReason && (
+        {showFitReason && displayReason && (
           <div className="deal-fit-reason">
             <span className="fit-icon">✓</span>
-            {fitReason}
+            {displayReason}
           </div>
         )}
 
@@ -91,6 +110,7 @@ export default function DealCard({ deal, showFitReason = false }) {
           target="_blank" 
           rel="noopener noreferrer" 
           className="btn btn-primary deal-cta"
+          onClick={handleDealClick}
         >
           View Deal →
         </a>

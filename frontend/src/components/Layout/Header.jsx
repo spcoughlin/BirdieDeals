@@ -19,7 +19,7 @@ export default function Header() {
       <div className="container header-content">
         <Link to="/" className="header-logo">
           <span className="logo-icon">⛳</span>
-          <span className="logo-text">BagFit Deals</span>
+          <span className="logo-text">BirdieDeals</span>
         </Link>
 
         <button 

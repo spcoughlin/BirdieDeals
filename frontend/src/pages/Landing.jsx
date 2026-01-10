@@ -118,7 +118,7 @@ export default function Landing() {
           <div className="container cta-content">
             <h2 className="cta-title">Ready to find your next upgrade?</h2>
             <p className="cta-subtitle">
-              Join thousands of golfers who save time and money with BagFit Deals.
+              Join thousands of golfers who save time and money with BirdieDeals.
             </p>
             <div className="cta-buttons">
               <Link to="/register" className="btn btn-accent btn-lg">

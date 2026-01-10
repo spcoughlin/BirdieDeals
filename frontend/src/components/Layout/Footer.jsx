@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer-content">
         <div className="footer-brand">
-          <span className="footer-logo">⛳ BagFit Deals</span>
+          <span className="footer-logo">⛳ BirdieDeals</span>
           <p className="footer-tagline">Smarter deals for smarter golfers.</p>
         </div>
         
@@ -18,10 +18,10 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p className="footer-copy">
-            © {new Date().getFullYear()} BagFit Deals. All rights reserved.
+            © {new Date().getFullYear()} BirdieDeals. All rights reserved.
           </p>
           <p className="footer-disclosure">
-            BagFit Deals earns commission from qualifying purchases. Prices and availability subject to change.
+            BirdieDeals earns commission from qualifying purchases. Prices and availability subject to change.
           </p>
         </div>
       </div>

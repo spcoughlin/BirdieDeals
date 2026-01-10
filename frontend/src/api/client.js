@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = 'http://localhost:8000/api';
 
 // Dummy data for when backend is unavailable
 const DUMMY_DEALS = [
@@ -113,12 +113,15 @@ const DUMMY_USER = {
   username: 'golfer123',
   email: 'golfer@example.com',
   profile: {
-    ageRange: '35-44',
     handicap: 12,
-    yearsPlaying: 8,
+    driverCarry: 245,
+    sevenIronCarry: 155,
     roundsPerMonth: 4,
-    budgetPreference: 'balanced',
-    preferredBrands: ['TaylorMade', 'Callaway', 'Titleist']
+    monthsPlayedPerYear: 8,
+    budgetSensitivity: 'Balanced',
+    willingToBuyUsed: true,
+    preferredBrands: ['TaylorMade', 'Callaway', 'Titleist'],
+    clubs: []
   }
 };
 
@@ -153,41 +156,58 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    console.log(`[API] ${options.method || 'GET'} ${url}`, { hasToken: !!token });
+    if (options.body) {
+      console.log(`[API] Request body:`, JSON.parse(options.body));
+    }
+
     try {
       const response = await fetch(url, {
         ...options,
         headers,
       });
 
+      console.log(`[API] Response status: ${response.status}`);
+
       if (response.status === 401) {
         this.setToken(null);
         throw new Error('Unauthorized');
       }
 
+      const data = await response.json();
+      console.log(`[API] Response data:`, data);
+
       if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || `Request failed with status ${response.status}`);
+        throw new Error(data.message || `Request failed with status ${response.status}`);
       }
 
-      return await response.json();
+      return data;
     } catch (error) {
+      console.error(`[API] Request failed:`, error.message);
       // If network error or backend unavailable, we'll handle with dummy data
-      console.warn('API request failed:', error.message);
+      if (this.useDummyData) {
+        console.warn('[API] Using dummy data fallback');
+      }
       throw error;
     }
   }
 
   // Auth endpoints
   async register(data) {
+    console.log('[REGISTER] Starting registration with:', { username: data.username, email: data.email });
     try {
-      return await this.request('/auth/register', {
+      const result = await this.request('/auth/register', {
         method: 'POST',
         body: JSON.stringify(data),
         auth: false,
       });
+      console.log('[REGISTER] Success:', result);
+      return result;
     } catch (error) {
+      console.error('[REGISTER] Failed:', error.message);
       // Return dummy success for demo
       if (this.useDummyData) {
+        console.warn('[REGISTER] Using dummy user fallback');
         const token = 'demo-token-' + Date.now();
         return {
           token,
@@ -204,15 +224,20 @@ class ApiClient {
   }
 
   async login(email, password) {
+    console.log('[LOGIN] Attempting login for:', email);
     try {
-      return await this.request('/auth/login', {
+      const result = await this.request('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         auth: false,
       });
+      console.log('[LOGIN] Success:', result);
+      return result;
     } catch (error) {
+      console.error('[LOGIN] Failed:', error.message);
       // Return dummy success for demo
       if (this.useDummyData) {
+        console.warn('[LOGIN] Using dummy user fallback');
         const token = 'demo-token-' + Date.now();
         return {
           token,
@@ -262,7 +287,43 @@ class ApiClient {
 
   async getSuggestedDeals() {
     try {
-      return await this.request('/deals/suggested');
+      const response = await this.request('/deals/suggested');
+      // Normalize backend response to frontend format
+      const deals = (response.deals || []).map(deal => ({
+        ...deal,
+        // Map matchReason to fitReason for DealCard component
+        fitReason: deal.matchReason || deal.fitReason,
+      }));
+      
+      // Build profileSummary in expected format
+      const profileSummary = response.profileSummary || {};
+      const gappingAnalysis = response.gappingAnalysis;
+      
+      // Convert gappingAnalysis to topGaps array for ProfileSummaryCard
+      const topGaps = [];
+      if (gappingAnalysis?.hasGap && gappingAnalysis?.gapType) {
+        topGaps.push(gappingAnalysis.gapType.replace('-', ' '));
+      }
+      // Add category recommendations based on risk scores
+      if (response.riskScores?.wedgeWearRisk === 'high') {
+        topGaps.push('wedges');
+      }
+      
+      return {
+        deals,
+        reasoning: response.reasoning || '',
+        profileSummary: {
+          handicap: profileSummary.handicap,
+          roundsPerMonth: profileSummary.roundsPerMonth,
+          // Map budgetSensitivity to budgetPreference for display
+          budgetPreference: profileSummary.budgetSensitivity || profileSummary.budgetPreference,
+          topGaps,
+          driverCarry: profileSummary.driverCarry,
+          clubCount: profileSummary.clubCount,
+        },
+        gappingAnalysis,
+        riskScores: response.riskScores,
+      };
     } catch (error) {
       if (this.useDummyData && this.getToken()) {
         // Return personalized dummy data with reasoning
@@ -282,6 +343,33 @@ class ApiClient {
         };
       }
       throw error;
+    }
+  }
+
+  // Deal tracking endpoints
+  async trackDealView(dealId) {
+    try {
+      return await this.request('/deals/view', {
+        method: 'POST',
+        body: JSON.stringify({ dealId }),
+      });
+    } catch (error) {
+      // Non-critical, just log
+      console.warn('Failed to track deal view:', error.message);
+      return { ok: true };
+    }
+  }
+
+  async trackDealClick(dealId) {
+    try {
+      return await this.request('/deals/click', {
+        method: 'POST',
+        body: JSON.stringify({ dealId }),
+      });
+    } catch (error) {
+      // Non-critical, just log
+      console.warn('Failed to track deal click:', error.message);
+      return { ok: true };
     }
   }
 }

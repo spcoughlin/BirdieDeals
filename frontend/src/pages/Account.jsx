@@ -67,27 +67,31 @@ export default function Account() {
                 <div className="profile-details">
                   <div className="profile-row">
                     <span className="profile-label">Handicap</span>
-                    <span className="profile-value">{profile.handicap || 'Not set'}</span>
+                    <span className="profile-value">{profile.handicap ?? 'Not set'}</span>
                   </div>
                   <div className="profile-row">
-                    <span className="profile-label">Age Range</span>
-                    <span className="profile-value">{profile.ageRange || 'Not set'}</span>
+                    <span className="profile-label">Driver Carry</span>
+                    <span className="profile-value">{profile.driverCarry ? `${profile.driverCarry} yards` : 'Not set'}</span>
                   </div>
                   <div className="profile-row">
-                    <span className="profile-label">Dominant Hand</span>
-                    <span className="profile-value">{profile.dominantHand || 'Not set'}</span>
-                  </div>
-                  <div className="profile-row">
-                    <span className="profile-label">Years Playing</span>
-                    <span className="profile-value">{profile.yearsPlaying || 'Not set'}</span>
+                    <span className="profile-label">7-Iron Carry</span>
+                    <span className="profile-value">{profile.sevenIronCarry ? `${profile.sevenIronCarry} yards` : 'Not set'}</span>
                   </div>
                   <div className="profile-row">
                     <span className="profile-label">Rounds/Month</span>
-                    <span className="profile-value">{profile.roundsPerMonth || 'Not set'}</span>
+                    <span className="profile-value">{profile.roundsPerMonth ?? 'Not set'}</span>
+                  </div>
+                  <div className="profile-row">
+                    <span className="profile-label">Months/Year</span>
+                    <span className="profile-value">{profile.monthsPlayedPerYear ?? 'Not set'}</span>
                   </div>
                   <div className="profile-row">
                     <span className="profile-label">Budget Preference</span>
-                    <span className="profile-value capitalize">{profile.budgetPreference || 'Not set'}</span>
+                    <span className="profile-value capitalize">{profile.budgetSensitivity || profile.budgetPreference || 'Not set'}</span>
+                  </div>
+                  <div className="profile-row">
+                    <span className="profile-label">Buy Used</span>
+                    <span className="profile-value">{profile.willingToBuyUsed ? 'Yes' : 'No'}</span>
                   </div>
                   {profile.preferredBrands?.length > 0 && (
                     <div className="profile-row">
@@ -101,13 +105,13 @@ export default function Account() {
 
             <div className="account-section card">
               <div className="card-body">
-                <h2>Your Bag</h2>
+                <h2>Your Bag ({profile.clubs?.length || 0} clubs)</h2>
                 {profile.clubs?.length > 0 ? (
                   <ul className="clubs-list">
                     {profile.clubs.map((club, i) => (
                       <li key={i}>
-                        <strong>{club.type}:</strong> {club.brand} {club.model}
-                        {club.modelYear && ` (${club.modelYear})`}
+                        <strong>{club.name || club.type}:</strong> {club.brand} {club.model}
+                        {club.carryYards && ` - ${club.carryYards}y carry`}
                       </li>
                     ))}
                   </ul>

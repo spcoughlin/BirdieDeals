@@ -29,7 +29,7 @@
 
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
@@ -80,6 +80,39 @@
 .gaps-list .tag {
   background-color: var(--color-accent);
   color: var(--color-primary-dark);
+}
+
+.gap-details {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+}
+
+.summary-risks {
+  margin-bottom: var(--space-md);
+}
+
+.risks-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-sm);
+  opacity: 0.9;
+}
+
+.risks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.risks-list .tag-warning {
+  background-color: var(--color-warning, #f59e0b);
+  color: #000;
+}
+
+.risks-list .tag-info {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-inverse);
 }
 
 .summary-reasoning {
