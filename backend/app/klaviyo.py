@@ -38,23 +38,22 @@ def _headers() -> Dict[str, str]:
 
 def compute_wedge_wear_risk(profile: Dict[str, Any]) -> Optional[str]:
     """
-    Estimate wedge wear risk based on rounds played.
+    Estimate wedge wear risk based on rounds per month.
     
-    - High: 8+ rounds/month for 10+ months = 80+ rounds/year
-    - Medium: 4-7 rounds/month or 6-9 months
-    - Low: casual players
+    - High: 8+ rounds/month
+    - Medium: 4-7 rounds/month
+    - Low: <4 rounds/month
+    
+    Returns None if roundsPerMonth is not provided.
     """
     rounds_per_month = profile.get("roundsPerMonth")
-    months_per_year = profile.get("monthsPlayedPerYear")
     
-    if rounds_per_month is None or months_per_year is None:
+    if rounds_per_month is None:
         return None
     
-    annual_rounds = rounds_per_month * months_per_year
-    
-    if annual_rounds >= 80:
+    if rounds_per_month >= 8:
         return "high"
-    elif annual_rounds >= 40:
+    elif rounds_per_month >= 4:
         return "medium"
     else:
         return "low"
@@ -63,6 +62,9 @@ def compute_wedge_wear_risk(profile: Dict[str, Any]) -> Optional[str]:
 def compute_gapping_risk(profile: Dict[str, Any]) -> Dict[str, Any]:
     """
     Detect gaps in the bag based on club yardages.
+    
+    Only analyzes clubs that have carryYards data (e.g., drivers, woods).
+    Clubs without carry distance (irons, putters) are skipped.
     
     Returns:
         {
@@ -75,9 +77,10 @@ def compute_gapping_risk(profile: Dict[str, Any]) -> Dict[str, Any]:
     if not clubs:
         return {"hasGap": False, "gapType": None, "gapDetails": None}
     
-    # Sort clubs by carry distance (descending)
-    clubs_with_carry = [c for c in clubs if c.get("carryYards")]
+    # Only analyze clubs with carryYards data
+    clubs_with_carry = [c for c in clubs if c.get("carryYards") is not None]
     if len(clubs_with_carry) < 2:
+        # Not enough data to detect gaps
         return {"hasGap": False, "gapType": None, "gapDetails": None}
     
     sorted_clubs = sorted(clubs_with_carry, key=lambda c: c["carryYards"], reverse=True)
@@ -111,11 +114,11 @@ def build_klaviyo_profile_properties(profile: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extract and compute Klaviyo profile properties from the golfer profile.
     
-    This sends a subset of profile data plus computed scores to Klaviyo.
+    Only includes fields that are actually present in the profile (not None).
     """
     props = {}
     
-    # Core golf profile fields
+    # Core golf profile fields - only if present and not None
     if profile.get("handicap") is not None:
         props["handicap"] = profile["handicap"]
     if profile.get("driverCarry"):
@@ -124,18 +127,28 @@ def build_klaviyo_profile_properties(profile: Dict[str, Any]) -> Dict[str, Any]:
         props["seven_iron_carry"] = profile["sevenIronCarry"]
     if profile.get("roundsPerMonth"):
         props["rounds_per_month"] = profile["roundsPerMonth"]
-    if profile.get("monthsPlayedPerYear"):
+    if profile.get("monthsPlayedPerYear"):  # Only include if not None
         props["months_per_year"] = profile["monthsPlayedPerYear"]
     if profile.get("region"):
         props["region"] = profile["region"]
+    
+    # Demographics
+    if profile.get("ageRange"):
+        props["age_range"] = profile["ageRange"]
+    if profile.get("dominantHand"):
+        props["dominant_hand"] = profile["dominantHand"]
+    if profile.get("yearsPlaying"):
+        props["years_playing"] = profile["yearsPlaying"]
     
     # Preferences
     if profile.get("budgetSensitivity"):
         props["budget_preference"] = profile["budgetSensitivity"]
     if profile.get("willingToBuyUsed") is not None:
         props["buy_used_preference"] = profile["willingToBuyUsed"]
+    if profile.get("preferredBrands"):
+        props["preferred_brands"] = profile["preferredBrands"]
     
-    # Computed risk scores
+    # Computed risk scores (only if we have data)
     wedge_risk = compute_wedge_wear_risk(profile)
     if wedge_risk:
         props["wedge_wear_risk"] = wedge_risk
@@ -151,6 +164,10 @@ def build_klaviyo_profile_properties(profile: Dict[str, Any]) -> Dict[str, Any]:
     clubs = profile.get("clubs", [])
     if clubs:
         props["club_count"] = len(clubs)
+        # List club types
+        club_names = [c.get("name") for c in clubs if c.get("name")]
+        if club_names:
+            props["club_types"] = club_names
     
     return props
 
