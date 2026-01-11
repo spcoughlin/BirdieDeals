@@ -101,7 +101,7 @@ Golf profile data and intent signals are sent to Klaviyo to:
 
   
 
-*  **Frontend:** React (Vite)
+*  **Frontend:** React (Vite) (Created with Lovable)
 
 *  **Backend:** FastAPI (Python)
 
