@@ -101,13 +101,13 @@ Golf profile data and intent signals are sent to Klaviyo to:
 
   
 
-*  **Frontend:** React (Vite) (Created with Lovable)
+*  **Frontend:** React/Vite (Created with Lovable)
 
-*  **Backend:** FastAPI (Python)
+*  **Backend:** FastAPI/Python
 
-*  **Database:** MongoDB
+*  **Database:** MongoDB (stores user profile and uauth information)
 
-*  **Personalization & messaging:** Klaviyo APIs
+*  **Personalization & messaging:** Klaviyo APIs (also stores user profiles for marketer use)
 
 *  **Deployment:** For the hackathon, Render, can be hosted locally
 
